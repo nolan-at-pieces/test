@@ -35,7 +35,7 @@
         "linux" === l ||
         "arm" === l ||
         "pkg" === l ||
-        "download-mac-all" === l ||
+        0 === l.indexOf("download-mac-all") ||
         0 === l.indexOf("download-link-section") ||
         0 === l.indexOf("download-link-dual") ||
         0 === l.indexOf("download-link-intel") ||
@@ -97,6 +97,12 @@
     });
   }
 
-  document.addEventListener("DOMContentLoaded", injectAll);
+  // If DOM is already ready, run injectAll immediately; otherwise, wait for DOMContentLoaded.
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", injectAll);
+  } else {
+    injectAll();
+  }
+
   new MutationObserver(injectAll).observe(document.body, { childList: true, subtree: true });
 }();
