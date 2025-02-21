@@ -1,7 +1,7 @@
 (function () {
   // Helper function to append the gaGlobal visitor id
   function appendGaVisitor(url) {
-    if (!url) return "#swag";
+    if (!url) return "#placeholder"; 
     if (typeof gaGlobal !== "undefined" && gaGlobal.vid) {
       var separator = url.indexOf('?') !== -1 ? '&' : '?';
       return url + separator + "ga_visitor=" + gaGlobal.vid;
@@ -113,10 +113,15 @@
     var parts = bq.textContent.split(/;\s*/),
         key = parts[0].trim().toLowerCase(),
         o = {};
+
+    // Instead of splitting on every "=" (which fails if the URL contains "="),
+    // we split only on the first occurrence.
     for (var i = 1; i < parts.length; i++) {
-      var kv = parts[i].split("=");
-      if (kv.length === 2) {
-        o[kv[0].trim().toLowerCase()] = kv[1].trim();
+      var eqIndex = parts[i].indexOf("=");
+      if (eqIndex > -1) {
+        var k = parts[i].substring(0, eqIndex).trim().toLowerCase();
+        var v = parts[i].substring(eqIndex + 1).trim();
+        o[k] = v;
       }
     }
 
