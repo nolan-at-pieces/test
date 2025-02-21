@@ -129,7 +129,7 @@
       );
       if(!isMatch) return;
       
-      var parts = txt.split(";"), key = parts[0].trim().toLowerCase(), o = {};
+      var parts = txt.split(/;\s*/), key = parts[0].trim().toLowerCase(), o = {};
       for(var i=1; i<parts.length; i++){
         var kv = parts[i].split("=");
         if(kv.length === 2){
