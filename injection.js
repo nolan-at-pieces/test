@@ -9,9 +9,155 @@
     return url;
   }
 
-  // Insert up-to-date CSS styles
+  // Updated CSS styles with a more responsive grid layout
   var s = document.createElement("style");
-  s.textContent = ".cDC{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;align-items:start}.singleDC{display:flex;justify-content:center;margin-top:16px}.singleDC .dCard, .singleDC details.dCard{width:100%;max-width:600px}.macCard{grid-column:1;grid-row:1}.winCard{grid-column:2;grid-row:1;align-self:start}.linuxCard{grid-column:1/3;grid-row:2}.dCard{border-radius:6px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;box-shadow:0 2px 4px rgba(0,0,0,0.1);padding:12px 16px;margin-bottom:0;transition:background .3s ease,color .3s ease,transform .3s ease,border .3s ease}.dCard:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.15)}.dLeft{display:flex;flex-direction:column}.dLeft strong{font-size:.95rem}.dLeft small{font-size:.8rem;opacity:.7;margin-top:4px;font-weight:normal}svg:not(.dropdown){width:18px;height:18px;min-width:18px;min-height:18px;transition:transform .2s;flex-shrink:0;margin-left:8px}a.dCard:hover svg:not(.dropdown){transform:translateY(2px)}html:not([data-theme=dark]) a.dCard{background:#fff;border:1px solid #ccc;color:#000}html:not([data-theme=dark]) a.dCard svg{color:#000}html:not([data-theme=dark]) .dropdown{stroke:#000}html:not([data-theme=dark]) a.dCard:hover{background:#f7f7f7}html[data-theme=dark] a.dCard{background:#1f1f1f;border:1px solid #333;color:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.5)}html[data-theme=dark] a.dCard svg{color:rgb(59 130 246 / var(--tw-text-opacity,1))}html[data-theme=dark] .dropdown{stroke:rgb(59 130 246 / var(--tw-text-opacity,1))}html[data-theme=dark] a.dCard:hover{background:#2a2a2a;border-color:#444;box-shadow:0 4px 8px rgba(0,0,0,0.6)}details.dCard{border:1px solid #ccc;background:#fff;color:#000;transition:background .3s ease,color .3s ease,transform .3s ease,border .3s ease;padding:0;box-shadow:0 2px 4px rgba(0,0,0,0.1);margin-bottom:0;border-radius:6px}html[data-theme=dark] details.dCard{background:#1f1f1f;border:1px solid #333;color:#fff;box-shadow:0 2px 4px rgba(0,0,0,0.5)}details.dCard summary{list-style:none;margin:0;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .3s ease,color .3s ease,transform .3s ease}details.dCard summary .dropdown{width:10px;height:10px;margin-left:8px;transition:transform .3s ease}details.dCard[open] .dropdown{transform:rotate(180deg)}details.dCard:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.15)}details.dCard>div{padding:12px 16px;border-top:1px solid rgba(0,0,0,0.1)}.macCard>div a.dCard+a.dCard{margin-top:8px}pre{background:rgba(0,0,0,0.05);padding:8px;border-radius:4px;white-space:pre-wrap;word-wrap:break-word}code{font-family:monospace}";
+  s.textContent =
+    ".cDC{" +
+      "display:grid;" +
+      "grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));" +
+      "gap:16px;" +
+      "margin-top:16px;" +
+      "align-items:start" +
+    "}" +
+    ".singleDC{" +
+      "display:flex;" +
+      "justify-content:center;" +
+      "margin-top:16px" +
+    "}" +
+    ".singleDC .dCard, .singleDC details.dCard{" +
+      "width:100%;" +
+      "max-width:600px" +
+    "}" +
+    ".macCard{grid-column:1;grid-row:1}" +
+    ".winCard{grid-column:2;grid-row:1;align-self:start}" +
+    ".linuxCard{grid-column:1/3;grid-row:2}" +
+    ".dCard{" +
+      "border-radius:6px;" +
+      "display:flex;" +
+      "justify-content:space-between;" +
+      "align-items:center;" +
+      "text-decoration:none;" +
+      "box-shadow:0 2px 4px rgba(0,0,0,0.1);" +
+      "padding:12px 16px;" +
+      "margin-bottom:0;" +
+      "transition:background .3s ease,color .3s ease,transform .3s ease,border .3s ease" +
+    "}" +
+    ".dCard:hover{" +
+      "transform:translateY(-2px);" +
+      "box-shadow:0 4px 8px rgba(0,0,0,0.15)" +
+    "}" +
+    ".dLeft{" +
+      "display:flex;" +
+      "flex-direction:column" +
+    "}" +
+    ".dLeft strong{" +
+      "font-size:.95rem" +
+    "}" +
+    ".dLeft small{" +
+      "font-size:.8rem;" +
+      "opacity:.7;" +
+      "margin-top:4px;" +
+      "font-weight:normal" +
+    "}" +
+    "svg:not(.dropdown){" +
+      "width:18px;" +
+      "height:18px;" +
+      "min-width:18px;" +
+      "min-height:18px;" +
+      "transition:transform .2s;" +
+      "flex-shrink:0;" +
+      "margin-left:8px" +
+    "}" +
+    "a.dCard:hover svg:not(.dropdown){" +
+      "transform:translateY(2px)" +
+    "}" +
+    "html:not([data-theme=dark]) a.dCard{" +
+      "background:#fff;" +
+      "border:1px solid #ccc;" +
+      "color:#000" +
+    "}" +
+    "html:not([data-theme=dark]) a.dCard svg{" +
+      "color:#000" +
+    "}" +
+    "html:not([data-theme=dark]) .dropdown{" +
+      "stroke:#000" +
+    "}" +
+    "html:not([data-theme=dark]) a.dCard:hover{" +
+      "background:#f7f7f7" +
+    "}" +
+    "html[data-theme=dark] a.dCard{" +
+      "background:#1f1f1f;" +
+      "border:1px solid #333;" +
+      "color:#fff;" +
+      "box-shadow:0 2px 4px rgba(0,0,0,0.5)" +
+    "}" +
+    "html[data-theme=dark] a.dCard svg{" +
+      "color:rgb(59 130 246 / var(--tw-text-opacity,1))" +
+    "}" +
+    "html[data-theme=dark] .dropdown{" +
+      "stroke:rgb(59 130 246 / var(--tw-text-opacity,1))" +
+    "}" +
+    "html[data-theme=dark] a.dCard:hover{" +
+      "background:#2a2a2a;" +
+      "border-color:#444;" +
+      "box-shadow:0 4px 8px rgba(0,0,0,0.6)" +
+    "}" +
+    "details.dCard{" +
+      "border:1px solid #ccc;" +
+      "background:#fff;" +
+      "color:#000;" +
+      "transition:background .3s ease,color .3s ease,transform .3s ease,border .3s ease;" +
+      "padding:0;" +
+      "box-shadow:0 2px 4px rgba(0,0,0,0.1);" +
+      "margin-bottom:0;" +
+      "border-radius:6px" +
+    "}" +
+    "html[data-theme=dark] details.dCard{" +
+      "background:#1f1f1f;" +
+      "border:1px solid #333;" +
+      "color:#fff;" +
+      "box-shadow:0 2px 4px rgba(0,0,0,0.5)" +
+    "}" +
+    "details.dCard summary{" +
+      "list-style:none;" +
+      "margin:0;" +
+      "padding:12px 16px;" +
+      "display:flex;" +
+      "align-items:center;" +
+      "justify-content:space-between;" +
+      "cursor:pointer;" +
+      "transition:background .3s ease,color .3s ease,transform .3s ease" +
+    "}" +
+    "details.dCard summary .dropdown{" +
+      "width:10px;" +
+      "height:10px;" +
+      "margin-left:8px;" +
+      "transition:transform .3s ease" +
+    "}" +
+    "details.dCard[open] .dropdown{" +
+      "transform:rotate(180deg)" +
+    "}" +
+    "details.dCard:hover{" +
+      "transform:translateY(-2px);" +
+      "box-shadow:0 4px 8px rgba(0,0,0,0.15)" +
+    "}" +
+    "details.dCard>div{" +
+      "padding:12px 16px;" +
+      "border-top:1px solid rgba(0,0,0,0.1)" +
+    "}" +
+    ".macCard>div a.dCard+a.dCard{" +
+      "margin-top:8px" +
+    "}" +
+    "pre{" +
+      "background:rgba(0,0,0,0.05);" +
+      "padding:8px;" +
+      "border-radius:4px;" +
+      "white-space:pre-wrap;" +
+      "word-wrap:break-word" +
+    "}" +
+    "code{" +
+      "font-family:monospace" +
+    "}";
   document.head.appendChild(s);
 
   // New Mac Buttons – returns a grid of two buttons (Intel & Apple Silicon)
@@ -73,7 +219,11 @@
   function inject() {
     var bq = [].slice.call(document.querySelectorAll("blockquote")).find(function (e) {
       var t = e.textContent.trim().toLowerCase();
-      return t.indexOf("download-link") === 0 || t === "windows" || t === "linux" || t === "all" || t === "download-mac-all";
+      return t.indexOf("download-link") === 0 ||
+             t === "windows" ||
+             t === "linux" ||
+             t === "all" ||
+             t === "download-mac-all";
     });
     if (!bq) return;
     console.log("Parsing blockquote text:", bq.textContent);
