@@ -1,7 +1,7 @@
 (function () {
   // Helper function to append the gaGlobal visitor id
   function appendGaVisitor(url) {
-    if (!url) return "#placeholder"; 
+    if (!url) return "#swag";
     if (typeof gaGlobal !== "undefined" && gaGlobal.vid) {
       var separator = url.indexOf('?') !== -1 ? '&' : '?';
       return url + separator + "ga_visitor=" + gaGlobal.vid;
@@ -114,11 +114,9 @@
         key = parts[0].trim().toLowerCase(),
         o = {};
     for (var i = 1; i < parts.length; i++) {
-      var eqIndex = parts[i].indexOf("=");
-      if (eqIndex > -1) {
-        var k = parts[i].substring(0, eqIndex).trim().toLowerCase();
-        var v = parts[i].substring(eqIndex + 1).trim();
-        o[k] = v;
+      var kv = parts[i].split("=");
+      if (kv.length === 2) {
+        o[kv[0].trim().toLowerCase()] = kv[1].trim();
       }
     }
 
