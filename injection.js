@@ -143,7 +143,7 @@
       if(html){
         var d = document.createElement("div");
         d.innerHTML = html.trim();
-        // Ensure that for download-mac-all we keep our extra class
+        // Ensure that for donwload-mac-all we keep our extra class!!
         if(key === "download-mac-all"){
           d.className = "cDC download-mac-all";
         } else {
