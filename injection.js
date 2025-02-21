@@ -9,6 +9,7 @@
     return url;
   }
 
+  // Insert style
   var s = document.createElement("style");
   s.textContent =
     "/* Full width container for download cards */\n" +
@@ -48,15 +49,16 @@
     "code{font-family:monospace}\n";
   document.head.appendChild(s);
 
+  // Parsing functions – identical to the last working version
   function downloadMacAll(o) {
     return '<div class="cDC download-mac-all">' +
-           '<div><a class="dCard macCard" style="width:100%" href="' + appendGaVisitor(o["mac-intel"] || "#") + '" target="_blank">' +
+           '<div><a class="dCard macCard" style="width:100%" href="' + appendGaVisitor(o["mac-intel"]) + '" target="_blank">' +
            '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
            '</svg></a></div>' +
-           '<div><a class="dCard macCard" style="width:100%" href="' + appendGaVisitor(o["mac-arm"] || "#") + '" target="_blank">' +
+           '<div><a class="dCard macCard" style="width:100%" href="' + appendGaVisitor(o["mac-arm"]) + '" target="_blank">' +
            '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
@@ -68,12 +70,12 @@
   function macDetails(o) {
     return '<details class="dCard macCard"><summary><div class="dLeft"><strong>macOS</strong><small>macOS 12.0 (Monterey) or higher</small></div>' +
            '<svg class="dropdown" viewBox="0 0 10 10"><polyline points="1,3 5,7 9,3" stroke="currentColor" fill="none" stroke-width="1"/></svg></summary>' +
-           '<div><a class="dCard" href="' + appendGaVisitor(o["mac-intel"] || "#") + '" target="_blank"><div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
+           '<div><a class="dCard" href="' + appendGaVisitor(o["mac-intel"]) + '" target="_blank"><div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
            '</svg></a>' +
-           '<a class="dCard" href="' + appendGaVisitor(o["mac-arm"] || "#") + '" target="_blank"><div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
+           '<a class="dCard" href="' + appendGaVisitor(o["mac-arm"]) + '" target="_blank"><div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
@@ -81,7 +83,7 @@
   }
 
   function winLink(o) {
-    return '<a class="dCard winCard" href="' + appendGaVisitor(o.windows || "#") + '" target="_blank">' +
+    return '<a class="dCard winCard" href="' + appendGaVisitor(o.windows) + '" target="_blank">' +
            '<div class="dLeft"><strong>Windows</strong><small>Windows 10 (1809) or higher</small></div>' +
            '<svg viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
@@ -98,16 +100,12 @@
   }
 
   function inject() {
-    // Find the first blockquote whose text starts with "download-link" or equals "windows", "linux", or "all"
     var bq = [].slice.call(document.querySelectorAll("blockquote")).find(function (e) {
       var t = e.textContent.trim().toLowerCase();
       return t.indexOf("download-link") === 0 || t === "windows" || t === "linux" || t === "all";
     });
     if (!bq) return;
-
     console.log("Parsing blockquote text:", bq.textContent);
-
-    // Split the text on semicolon followed by any whitespace
     var parts = bq.textContent.split(/;\s*/),
         key = parts[0].trim().toLowerCase(),
         o = {};
@@ -135,7 +133,7 @@
         break;
       case "intel":
       case "download-link-intel":
-        html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"] || "#") + '" target="_blank">' +
+        html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"]) + '" target="_blank">' +
                '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
                '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
                '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
@@ -144,7 +142,7 @@
         break;
       case "arm":
       case "download-link-arm":
-        html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-arm"] || "#") + '" target="_blank">' +
+        html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-arm"]) + '" target="_blank">' +
                '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
                '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
                '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
@@ -153,7 +151,7 @@
         break;
       case "pkg":
       case "download-lnk-intel":
-        html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"] || "#") + '" target="_blank">' +
+        html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"]) + '" target="_blank">' +
                '<div class="dLeft"><strong>Intel (pkg)</strong><small>Download for macOS - Intel (.pkg)</small></div>' +
                '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
                '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
@@ -176,10 +174,8 @@
     if (html) {
       var d = document.createElement("div");
       d.innerHTML = html.trim();
-      // If there are multiple download cards, use grid; otherwise, use single card style
       var cnt = d.querySelectorAll("a.dCard, details.dCard").length;
       d.className = cnt > 1 ? "cDC" : "singleDC";
-      // Replace the original blockquote with the new download card container
       bq.parentNode.replaceChild(d, bq);
     }
   }
