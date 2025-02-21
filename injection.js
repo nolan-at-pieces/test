@@ -9,7 +9,7 @@
     return url;
   }
 
-  // Insert CSS styles (exactly as provided)
+  // Insert CSS styles
   var s = document.createElement("style");
   s.textContent =
     ".cDC{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;align-items:start}" +
@@ -63,10 +63,11 @@
            '</div>';
   }
 
-  // Parsing and injection – only handles "download-mac-all"
+  // Parsing and injection – uses robust splitting and replaces the first matching blockquote
   function inject() {
     var bq = [].slice.call(document.querySelectorAll("blockquote")).find(function (e) {
-      return e.textContent.trim().toLowerCase().indexOf("download-mac-all") === 0;
+      var t = e.textContent.trim().toLowerCase();
+      return t.indexOf("download-link") === 0 || t === "windows" || t === "linux" || t === "all";
     });
     if (!bq) return;
     console.log("Parsing blockquote text:", bq.textContent);
@@ -76,8 +77,7 @@
         key = parts[0].trim().toLowerCase(),
         o = {};
 
-    // Only parse if key equals "download-mac-all"
-    if (key !== "download-mac-all") return;
+    // FIX: only split each key=value pair on the first "="
     for (var i = 1; i < parts.length; i++) {
       var eqIndex = parts[i].indexOf("=");
       if (eqIndex > -1) {
@@ -87,7 +87,61 @@
       }
     }
 
-    var html = downloadMacAll(o);
+    var html = "";
+    switch (key) {
+      case "all":
+      case "download-link-section":
+        html = macDetails(o) + winLink(o) + linuxDetails(o);
+        break;
+      case "download-mac-all":
+        html = downloadMacAll(o);
+        break;
+      case "dual":
+      case "download-link-dual":
+        html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;">' +
+               '<div>' + macDetails(o) + '</div>' +
+               '<div>' + winLink(o) + '</div></div>';
+        break;
+      case "intel":
+      case "download-link-intel":
+        html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"]) + '" target="_blank">' +
+               '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
+               '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
+               '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
+               '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
+               '</svg></a>';
+        break;
+      case "arm":
+      case "download-link-arm":
+        html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-arm"]) + '" target="_blank">' +
+               '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
+               '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
+               '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
+               '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
+               '</svg></a>';
+        break;
+      case "pkg":
+      case "download-lnk-intel":
+        html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"]) + '" target="_blank">' +
+               '<div class="dLeft"><strong>Intel (pkg)</strong><small>Download for macOS - Intel (.pkg)</small></div>' +
+               '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
+               '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
+               '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
+               '</svg></a>';
+        break;
+      case "windows":
+      case "download-link-windows":
+        html = winLink(o);
+        break;
+      case "linux":
+      case "download-link-linux":
+        html = linuxDetails(o);
+        break;
+      default:
+        html = "";
+        break;
+    }
+
     if (html) {
       var d = document.createElement("div");
       d.innerHTML = html.trim();
