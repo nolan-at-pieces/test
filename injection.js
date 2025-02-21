@@ -108,7 +108,9 @@
   function injectAll(){
     var bqs = [].slice.call(document.querySelectorAll("blockquote"));
     bqs.forEach(function(bq){
-      var txt = bq.textContent.trim(), l = txt.toLowerCase();
+      var txt = bq.textContent.trim();
+      console.log("Parsing blockquote text:", txt);
+      var l = txt.toLowerCase();
       var isMatch = (
         "all"===l || 
         "dual"===l || 
@@ -129,7 +131,7 @@
       );
       if(!isMatch) return;
       
-      // Use regex to split on semicolon followed by any whitespace (including newlines)
+      // Use regex to split on semicolon followed by any whitespace
       var parts = txt.split(/;\s*/),
           key = parts[0].trim().toLowerCase(), 
           o = {};
@@ -215,5 +217,5 @@
   }
   
   document.addEventListener("DOMContentLoaded", injectAll);
-  new MutationObserver(injectAll).observe(document.body, {childList:true, subtree:true});
+  new MutationObserver(injectAll).observe(document.body, { childList:true, subtree:true });
 }();
