@@ -129,7 +129,10 @@
       );
       if(!isMatch) return;
       
-      var parts = txt.split(/;\s*/), key = parts[0].trim().toLowerCase(), o = {};
+      // Use regex to split on semicolon followed by any whitespace (including newlines)
+      var parts = txt.split(/;\s*/),
+          key = parts[0].trim().toLowerCase(), 
+          o = {};
       for(var i=1; i<parts.length; i++){
         var kv = parts[i].split("=");
         if(kv.length === 2){
@@ -195,11 +198,9 @@
         var d = document.createElement("div");
         d.innerHTML = html.trim();
         
-        // For download-mac-all, keep the extra class
         if(key === "download-mac-all"){
           d.className = "cDC download-mac-all";
         } else {
-          // Decide if multiple or single
           var cnt = d.querySelectorAll("a.dCard, details.dCard").length;
           d.className = cnt > 1 ? "cDC" : "singleDC";
         }
@@ -208,7 +209,6 @@
         wrap.className = "dcWrap";
         wrap.appendChild(d);
         
-        // Replace the blockquote with the newly created download card container
         bq.parentNode.replaceChild(wrap, bq);
       }
     });
