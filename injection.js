@@ -1,4 +1,12 @@
 !function(){
+  // Helper function to append the gaGlobal visitor id
+  function appendGaVisitor(url) {
+    if (!url) return "#";
+    var param = (typeof gaGlobal !== "undefined" && gaGlobal.vid) ? ("ga_visitor=" + gaGlobal.vid) : "";
+    if(param === "") return url;
+    return url + (url.indexOf("?") === -1 ? "?" : "&") + param;
+  }
+  
   var s = document.createElement("style");
   s.textContent =
   "/* Full width container for download cards */\n" +
@@ -48,14 +56,14 @@
   
   function downloadMacAll(o){
     return '<div class="cDC download-mac-all">' +
-           '<div><a class="dCard macCard" style="width:100%" href="'+(o["mac-intel"]||"#")+'" target="_blank">' +
+           '<div><a class="dCard macCard" style="width:100%" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank">' +
            '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
            '</svg></a></div>' +
-           '<div><a class="dCard macCard" style="width:100%" href="'+(o["mac-arm"]||"#")+'" target="_blank">' +
-           '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon/M-Series</small></div>' +
+           '<div><a class="dCard macCard" style="width:100%" href="'+appendGaVisitor(o["mac-arm"]||"#")+'" target="_blank">' +
+           '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
@@ -66,12 +74,12 @@
   function macDetails(o){
     return '<details class="dCard macCard"><summary><div class="dLeft"><strong>macOS</strong><small>macOS 12.0 (Monterey) or higher</small></div>' +
            '<svg class="dropdown" viewBox="0 0 10 10"><polyline points="1,3 5,7 9,3" stroke="currentColor" fill="none" stroke-width="1"/></svg></summary>' +
-           '<div><a class="dCard" href="'+(o["mac-intel"]||"#")+'" target="_blank"><div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
+           '<div><a class="dCard" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank"><div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
            '</svg></a>' +
-           '<a class="dCard" href="'+(o["mac-arm"]||"#")+'" target="_blank"><div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon/M-Series</small></div>' +
+           '<a class="dCard" href="'+appendGaVisitor(o["mac-arm"]||"#")+'" target="_blank"><div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
@@ -79,8 +87,8 @@
   }
   
   function winLink(o){
-    return '<a class="dCard winCard" href="'+(o.windows||"#")+'" target="_blank">' +
-           '<div class="dLeft"><strong>Windows</strong><small>Windows 10 (1809) or newer</small></div>' +
+    return '<a class="dCard winCard" href="'+appendGaVisitor(o.windows||"#")+'" target="_blank">' +
+           '<div class="dLeft"><strong>Windows</strong><small>Windows 10 (1809) or higher</small></div>' +
            '<svg viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
@@ -121,15 +129,15 @@
           break;
         case "intel":
         case "download-link-intel":
-          html = '<a class="dCard macCard" href="'+(o["mac-intel"]||"#")+'" target="_blank"><div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div><svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none"><path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/><path d="M14 14H2V16H14V14Z" fill="currentColor"/></svg></a>';
+          html = '<a class="dCard macCard" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank"><div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div><svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none"><path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/><path d="M14 14H2V16H14V14Z" fill="currentColor"/></svg></a>';
           break;
         case "arm":
         case "download-link-arm":
-          html = '<a class="dCard macCard" href="'+(o["mac-arm"]||"#")+'" target="_blank"><div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon/M-Series</small></div><svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none"><path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/><path d="M14 14H2V16H14V14Z" fill="currentColor"/></svg></a>';
+          html = '<a class="dCard macCard" href="'+appendGaVisitor(o["mac-arm"]||"#")+'" target="_blank"><div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div><svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none"><path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/><path d="M14 14H2V16H14V14Z" fill="currentColor"/></svg></a>';
           break;
         case "pkg":
         case "download-lnk-intel":
-          html = '<a class="dCard macCard" href="'+(o["mac-intel"]||"#")+'" target="_blank"><div class="dLeft"><strong>Intel (pkg)</strong><small>Download for macOS - Intel (.pkg)</small></div><svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none"><path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/><path d="M14 14H2V16H14V14Z" fill="currentColor"/></svg></a>';
+          html = '<a class="dCard macCard" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank"><div class="dLeft"><strong>Intel (pkg)</strong><small>Download for macOS - Intel (.pkg)</small></div><svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none"><path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/><path d="M14 14H2V16H14V14Z" fill="currentColor"/></svg></a>';
           break;
         case "windows":
         case "download-link-windows":
@@ -143,7 +151,7 @@
       if(html){
         var d = document.createElement("div");
         d.innerHTML = html.trim();
-        // Ensure that for donwload-mac-all we keep our extra class!!
+        // Ensure that for download-mac-all we keep our extra class!!
         if(key === "download-mac-all"){
           d.className = "cDC download-mac-all";
         } else {
