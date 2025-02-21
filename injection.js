@@ -1,7 +1,7 @@
 !function(){
   // Helper function to append the gaGlobal visitor id
   function appendGaVisitor(url) {
-    if (!url) return "#";
+    if (!url) return "#swag";
     if (typeof gaGlobal !== "undefined" && gaGlobal.vid) {
       var separator = url.indexOf('?') !== -1 ? '&' : '?';
       return url + separator + "ga_visitor=" + gaGlobal.vid;
