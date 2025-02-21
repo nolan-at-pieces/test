@@ -109,13 +109,34 @@
     var bqs = [].slice.call(document.querySelectorAll("blockquote"));
     bqs.forEach(function(bq){
       var txt = bq.textContent.trim(), l = txt.toLowerCase();
-      var isMatch = ("all"===l || "dual"===l || "intel"===l || "windows"===l || "linux"===l || "arm"===l || "pkg"===l || "download-mac-all"===l || 0===l.indexOf("download-link-section") || 0===l.indexOf("download-link-dual") || 0===l.indexOf("download-link-intel") || 0===l.indexOf("download-link-windows") || 0===l.indexOf("download-link-linux") || 0===l.indexOf("download-link-arm") || 0===l.indexOf("download-lnk-intel") || 0===l.indexOf("download-mac-all"));
-      if(!isMatch)return;
+      var isMatch = (
+        "all"===l || 
+        "dual"===l || 
+        "intel"===l || 
+        "windows"===l || 
+        "linux"===l || 
+        "arm"===l || 
+        "pkg"===l || 
+        "download-mac-all"===l || 
+        0===l.indexOf("download-link-section") || 
+        0===l.indexOf("download-link-dual") || 
+        0===l.indexOf("download-link-intel") || 
+        0===l.indexOf("download-link-windows") || 
+        0===l.indexOf("download-link-linux") || 
+        0===l.indexOf("download-link-arm") || 
+        0===l.indexOf("download-lnk-intel") || 
+        0===l.indexOf("download-mac-all")
+      );
+      if(!isMatch) return;
+      
       var parts = txt.split(";"), key = parts[0].trim().toLowerCase(), o = {};
       for(var i=1; i<parts.length; i++){
         var kv = parts[i].split("=");
-        kv.length === 2 && (o[kv[0].trim().toLowerCase()] = kv[1].trim());
+        if(kv.length === 2){
+          o[kv[0].trim().toLowerCase()] = kv[1].trim();
+        }
       }
+      
       var html = "";
       switch(key){
         case "all":
@@ -127,19 +148,38 @@
           break;
         case "dual":
         case "download-link-dual":
-          html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;"><div>' + macDetails(o) + '</div><div>' + winLink(o) + '</div></div>';
+          html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;">' 
+                 + '<div>' + macDetails(o) + '</div>' 
+                 + '<div>' + winLink(o) + '</div></div>';
           break;
         case "intel":
         case "download-link-intel":
-          html = '<a class="dCard macCard" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank"><div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div><svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none"><path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/><path d="M14 14H2V16H14V14Z" fill="currentColor"/></svg></a>';
+          html = '<a class="dCard macCard" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank">'
+               + '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>'
+               + '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">'
+               + '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>'
+               + '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>'
+               + '</svg></a>';
           break;
         case "arm":
         case "download-link-arm":
-          html = '<a class="dCard macCard" href="'+appendGaVisitor(o["mac-arm"]||"#")+'" target="_blank"><div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div><svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none"><path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/><path d="M14 14H2V16H14V14Z" fill="currentColor"/></svg></a>';
+          html = '<a class="dCard macCard" href="'+appendGaVisitor(o["mac-arm"]||"#")+'" target="_blank">'
+               + '<div class="dLeft"><strong>Apple Silicon</strong>'
+               + '<small>Download for macOS - Apple Silicon / M-Series</small></div>'
+               + '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">'
+               + '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>'
+               + '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>'
+               + '</svg></a>';
           break;
         case "pkg":
         case "download-lnk-intel":
-          html = '<a class="dCard macCard" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank"><div class="dLeft"><strong>Intel (pkg)</strong><small>Download for macOS - Intel (.pkg)</small></div><svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none"><path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/><path d="M14 14H2V16H14V14Z" fill="currentColor"/></svg></a>';
+          html = '<a class="dCard macCard" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank">'
+               + '<div class="dLeft"><strong>Intel (pkg)</strong>'
+               + '<small>Download for macOS - Intel (.pkg)</small></div>'
+               + '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">'
+               + '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>'
+               + '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>'
+               + '</svg></a>';
           break;
         case "windows":
         case "download-link-windows":
@@ -150,19 +190,25 @@
           html = linuxDetails(o);
           break;
       }
+      
       if(html){
         var d = document.createElement("div");
         d.innerHTML = html.trim();
-        // Ensure that for download-mac-all we keep our extra class!!
+        
+        // For download-mac-all, keep the extra class
         if(key === "download-mac-all"){
           d.className = "cDC download-mac-all";
         } else {
+          // Decide if multiple or single
           var cnt = d.querySelectorAll("a.dCard, details.dCard").length;
           d.className = cnt > 1 ? "cDC" : "singleDC";
         }
+        
         var wrap = document.createElement("div");
         wrap.className = "dcWrap";
         wrap.appendChild(d);
+        
+        // Replace the blockquote with the newly created download card container
         bq.parentNode.replaceChild(wrap, bq);
       }
     });
