@@ -63,6 +63,43 @@
            '</div>';
   }
 
+  // Mac details function creates a <details> element with two download buttons
+  function macDetails(o) {
+    return '<details class="dCard macCard"><summary><div class="dLeft"><strong>macOS</strong><small>macOS 12.0 (Monterey) or higher</small></div>' +
+           '<svg class="dropdown" viewBox="0 0 10 10"><polyline points="1,3 5,7 9,3" stroke="currentColor" fill="none" stroke-width="1"/></svg></summary>' +
+           '<div>' +
+           '<a class="dCard" href="' + appendGaVisitor(o["mac-intel"]) + '" target="_blank">' +
+           '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
+           '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
+           '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
+           '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
+           '</svg></a>' +
+           '<a class="dCard" href="' + appendGaVisitor(o["mac-arm"]) + '" target="_blank">' +
+           '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
+           '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
+           '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
+           '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
+           '</svg></a>' +
+           '</div></details>';
+  }
+
+  function winLink(o) {
+    return '<a class="dCard winCard" href="' + appendGaVisitor(o.windows) + '" target="_blank">' +
+           '<div class="dLeft"><strong>Windows</strong><small>Windows 10 (1809) or higher</small></div>' +
+           '<svg viewBox="0 0 16 16" fill="none">' +
+           '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
+           '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
+           '</svg></a>';
+  }
+
+  function linuxDetails(o) {
+    return '<details class="dCard linuxCard"><summary><div class="dLeft"><strong>Linux</strong><small>Ubuntu 22+ required</small></div>' +
+           '<svg class="dropdown" viewBox="0 0 10 10"><polyline points="1,3 5,7 9,3" stroke="currentColor" fill="none" stroke-width="1"/></svg></summary>' +
+           '<div><p>Run these commands in <strong>order</strong> to install and set up Pieces Desktop App:</p>' +
+           '<pre><code>sudo snap install pieces-os\nsudo snap connect pieces-os:process-control :process-control\nsudo snap install pieces-for-developers</code></pre>' +
+           "<p>Then, type <code>pieces-for-developers</code> to launch.</p></div></details>";
+  }
+
   // Parsing and injection – uses robust splitting and replaces the first matching blockquote
   function inject() {
     var bq = [].slice.call(document.querySelectorAll("blockquote")).find(function (e) {
@@ -76,8 +113,6 @@
     var parts = bq.textContent.split(/;\s*/),
         key = parts[0].trim().toLowerCase(),
         o = {};
-
-    // FIX: only split each key=value pair on the first "="
     for (var i = 1; i < parts.length; i++) {
       var eqIndex = parts[i].indexOf("=");
       if (eqIndex > -1) {
