@@ -197,8 +197,14 @@
         }
         var wrap = document.createElement("div");
         wrap.className = "dcWrap";
-        wrap.appendChild(d);
-        bq.parentNode.replaceChild(wrap, bq);
+        // Ensure the blockquote is still in the DOM before replacing it
+        if(bq.parentNode){
+          try {
+            bq.parentNode.replaceChild(wrap, bq);
+          } catch(e) {
+            console.error("Error replacing blockquote:", e);
+          }
+        }
       }
     });
   }
