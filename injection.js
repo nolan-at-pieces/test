@@ -3,57 +3,59 @@
   function appendGaVisitor(url) {
     if (!url) return "#";
     var param = (typeof gaGlobal !== "undefined" && gaGlobal.vid) ? ("ga_visitor=" + gaGlobal.vid) : "";
-    if(param === "") return url;
+    if (param === "") return url;
     return url + (url.indexOf("?") === -1 ? "?" : "&") + param;
   }
   
-  // Create and inject the style element for download cards
-  var s = document.createElement("style");
-  s.textContent =
-    "/* Full width container for download cards */\n" +
-    ".dcWrap{display:block;width:100%;margin-bottom:16px}\n" +
-    "/* Grid container fills full width and stretches items */\n" +
-    ".cDC{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;align-items:stretch;width:100%;}\n" +
-    "/* Single download cards now use full container width */\n" +
-    ".singleDC{display:flex;justify-content:center;margin-top:16px}\n" +
-    ".singleDC .dCard, .singleDC details.dCard{width:100%;}\n" +
-    ".macCard{}\n" +
-    ".winCard{grid-column:2;grid-row:1;align-self:start;}\n" +
-    ".linuxCard{grid-column:1/3;grid-row:2;}\n" +
-    ".dCard{border-radius:6px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;box-shadow:0 3px 6px rgba(0,0,0,0.15);padding:12px 16px;margin-bottom:0;transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease,border 0.3s ease;}\n" +
-    ".dCard:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 4px 8px rgba(0,0,0,0.15);}\n" +
-    ".dLeft{display:flex;flex-direction:column;}\n" +
-    ".dLeft strong{font-size:0.95rem;}\n" +
-    ".dLeft small{font-size:0.8rem;opacity:0.7;margin-top:4px;font-weight:normal;}\n" +
-    "svg:not(.dropdown){width:18px;height:18px;min-width:18px;min-height:18px;transition:transform 0.2s;flex-shrink:0;margin-left:8px;}\n" +
-    "a.dCard:hover svg:not(.dropdown){transform:translateY(2px);}\n" +
-    "html:not([data-theme=dark]) a.dCard{background:#eff6ff;border:1px solid #ccc;color:#2563eb;box-shadow:0 3px 6px rgba(0,0,0,0.15);transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease,border 0.3s ease;}\n" +
-    "html:not([data-theme=dark]) a.dCard svg{color:#2563eb;transition:color 0.3s ease,stroke 0.3s ease;}\n" +
-    "html:not([data-theme=dark]) .dropdown{stroke:#2563eb;transition:color 0.3s ease,stroke 0.3s ease;}\n" +
-    "html:not([data-theme=dark]) a.dCard:hover{background:#dbeafe;color:#1d4ed8;}\n" +
-    "html:not([data-theme=dark]) a.dCard:hover svg,html:not([data-theme=dark]) a.dCard:hover .dropdown{color:#1d4ed8;stroke:#1d4ed8;}\n" +
-    "html[data-theme=dark] a.dCard{background:#1f1f1f;border:1px solid #333;color:#fff;box-shadow:0 3px 6px rgba(0,0,0,0.6);transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease,border 0.3s ease;}\n" +
-    "html[data-theme=dark] a.dCard svg,html[data-theme=dark] .dropdown{color:#fff;stroke:#fff;transition:color 0.3s ease,stroke 0.3s ease;}\n" +
-    "html[data-theme=dark] a.dCard:hover{background:#2a2a2a;border-color:#444;box-shadow:0 4px 8px rgba(0,0,0,0.6);color:rgb(59 130 246/var(--tw-text-opacity,1));}\n" +
-    "html[data-theme=dark] a.dCard:hover svg,html[data-theme=dark] a.dCard:hover .dropdown{color:rgb(59 130 246/var(--tw-text-opacity,1));stroke:rgb(59 130 246/var(--tw-text-opacity,1));}\n" +
-    "details.dCard{border:1px solid #ccc;background:#fff;color:#000;transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease,border 0.3s ease;padding:0;box-shadow:0 3px 6px rgba(0,0,0,0.15);margin-bottom:0;border-radius:6px;}\n" +
-    "html[data-theme=dark] details.dCard{background:#1f1f1f;border:1px solid #333;color:#fff;box-shadow:0 3px 6px rgba(0,0,0,0.6);}\n" +
-    "details.dCard summary{list-style:none;margin:0;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease;}\n" +
-    "details.dCard summary .dropdown{width:10px;height:10px;margin-left:8px;transition:transform 0.3s ease;}\n" +
-    "details.dCard[open] .dropdown{transform:rotate(180deg);}\n" +
-    "details.dCard:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.15);}\n" +
-    "details.dCard>div{padding:12px 16px;border-top:1px solid rgba(0,0,0,0.1);}\n" +
-    ".macCard>div a.dCard+a.dCard{margin-top:8px;}\n" +
-    "pre{background:rgba(0,0,0,0.05);padding:8px;border-radius:4px;white-space:pre-wrap;word-wrap:break-word;}\n" +
-    "code{font-family:monospace;}\n" +
-    "html:not([data-theme=dark]) details.dCard summary:hover{background:#dbeafe;}\n" +
-    ".dropdown{color:inherit;fill:currentColor;stroke:currentColor;}\n" +
-    "/* --- New CSS for download-mac-all only --- */\n" +
-    "/* These rules apply only to the container with both .cDC and .download-mac-all classes */\n" +
-    ".download-mac-all{grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)) !important;}\n" +
-    ".download-mac-all .dCard{padding:8px 16px !important;}\n";
-  
-  document.head.appendChild(s);
+  // Inject styles only once by checking for an existing style element.
+  if (!document.getElementById("download-card-styles")){
+    var s = document.createElement("style");
+    s.id = "download-card-styles";
+    s.textContent =
+      "/* Full width container for download cards */\n" +
+      ".dcWrap{display:block;width:100%;margin-bottom:16px}\n" +
+      "/* Grid container fills full width and stretches items */\n" +
+      ".cDC{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;align-items:stretch;width:100%;}\n" +
+      "/* Single download cards now use full container width */\n" +
+      ".singleDC{display:flex;justify-content:center;margin-top:16px}\n" +
+      ".singleDC .dCard, .singleDC details.dCard{width:100%;}\n" +
+      ".macCard{}\n" +
+      ".winCard{grid-column:2;grid-row:1;align-self:start;}\n" +
+      ".linuxCard{grid-column:1/3;grid-row:2;}\n" +
+      ".dCard{border-radius:6px;display:flex;justify-content:space-between;align-items:center;text-decoration:none;box-shadow:0 3px 6px rgba(0,0,0,0.15);padding:12px 16px;margin-bottom:0;transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease,border 0.3s ease;}\n" +
+      ".dCard:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 4px 8px rgba(0,0,0,0.15);}\n" +
+      ".dLeft{display:flex;flex-direction:column;}\n" +
+      ".dLeft strong{font-size:0.95rem;}\n" +
+      ".dLeft small{font-size:0.8rem;opacity:0.7;margin-top:4px;font-weight:normal;}\n" +
+      "svg:not(.dropdown){width:18px;height:18px;min-width:18px;min-height:18px;transition:transform 0.2s;flex-shrink:0;margin-left:8px;}\n" +
+      "a.dCard:hover svg:not(.dropdown){transform:translateY(2px);}\n" +
+      "html:not([data-theme=dark]) a.dCard{background:#eff6ff;border:1px solid #ccc;color:#2563eb;box-shadow:0 3px 6px rgba(0,0,0,0.15);transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease,border 0.3s ease;}\n" +
+      "html:not([data-theme=dark]) a.dCard svg{color:#2563eb;transition:color 0.3s ease,stroke 0.3s ease;}\n" +
+      "html:not([data-theme=dark]) .dropdown{stroke:#2563eb;transition:color 0.3s ease,stroke 0.3s ease;}\n" +
+      "html:not([data-theme=dark]) a.dCard:hover{background:#dbeafe;color:#1d4ed8;}\n" +
+      "html:not([data-theme=dark]) a.dCard:hover svg,html:not([data-theme=dark]) a.dCard:hover .dropdown{color:#1d4ed8;stroke:#1d4ed8;}\n" +
+      "html[data-theme=dark] a.dCard{background:#1f1f1f;border:1px solid #333;color:#fff;box-shadow:0 3px 6px rgba(0,0,0,0.6);transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease,border 0.3s ease;}\n" +
+      "html[data-theme=dark] a.dCard svg,html[data-theme=dark] .dropdown{color:#fff;stroke:#fff;transition:color 0.3s ease,stroke 0.3s ease;}\n" +
+      "html[data-theme=dark] a.dCard:hover{background:#2a2a2a;border-color:#444;box-shadow:0 4px 8px rgba(0,0,0,0.6);color:rgb(59 130 246/var(--tw-text-opacity,1));}\n" +
+      "html[data-theme=dark] a.dCard:hover svg,html[data-theme=dark] a.dCard:hover .dropdown{color:rgb(59 130 246/var(--tw-text-opacity,1));stroke:rgb(59 130 246/var(--tw-text-opacity,1));}\n" +
+      "details.dCard{border:1px solid #ccc;background:#fff;color:#000;transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease,border 0.3s ease;padding:0;box-shadow:0 3px 6px rgba(0,0,0,0.15);margin-bottom:0;border-radius:6px;}\n" +
+      "html[data-theme=dark] details.dCard{background:#1f1f1f;border:1px solid #333;color:#fff;box-shadow:0 3px 6px rgba(0,0,0,0.6);}\n" +
+      "details.dCard summary{list-style:none;margin:0;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background 0.3s ease,color 0.3s ease,transform 0.3s ease;}\n" +
+      "details.dCard summary .dropdown{width:10px;height:10px;margin-left:8px;transition:transform 0.3s ease;}\n" +
+      "details.dCard[open] .dropdown{transform:rotate(180deg);}\n" +
+      "details.dCard:hover{transform:translateY(-2px);box-shadow:0 4px 8px rgba(0,0,0,0.15);}\n" +
+      "details.dCard>div{padding:12px 16px;border-top:1px solid rgba(0,0,0,0.1);}\n" +
+      ".macCard>div a.dCard+a.dCard{margin-top:8px;}\n" +
+      "pre{background:rgba(0,0,0,0.05);padding:8px;border-radius:4px;white-space:pre-wrap;word-wrap:break-word;}\n" +
+      "code{font-family:monospace;}\n" +
+      "html:not([data-theme=dark]) details.dCard summary:hover{background:#dbeafe;}\n" +
+      ".dropdown{color:inherit;fill:currentColor;stroke:currentColor;}\n" +
+      "/* --- New CSS for download-mac-all only --- */\n" +
+      "/* These rules apply only to the container with both .cDC and .download-mac-all classes */\n" +
+      ".download-mac-all{grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)) !important;}\n" +
+      ".download-mac-all .dCard{padding:8px 16px !important;}\n";
+    document.head.appendChild(s);
+  }
   
   // Build the download cards for macOS (Intel and Apple Silicon)
   function downloadMacAll(o){
@@ -108,27 +110,27 @@
            "<p>Then, type <code>pieces-for-developers</code> to launch.</p></div></details>";
   }
   
-  // Main function to scan for blockquote elements and replace them with download cards.
-  // Now skips blockquotes that are already processed.
+  // Main function to scan for blockquote elements and replace with download cards
   function injectAll(){
+    // Skip injection if the page title indicates a 404 page.
+    if(document.title && document.title.indexOf("404") > -1) return;
+    
     var bqs = [].slice.call(document.querySelectorAll("blockquote"));
     bqs.forEach(function(bq){
-      // Skip if we've already processed this blockquote
-      if(bq.hasAttribute("data-download-injected")) return;
+      // Skip if this blockquote was already processed.
+      if(bq.getAttribute("data-download-processed")) return;
       
       var txt = bq.textContent.trim(), l = txt.toLowerCase();
-      var isMatch = ("all" === l || "dual" === l || "intel" === l || "windows" === l ||
-                     "linux" === l || "arm" === l || "pkg" === l || "download-mac-all" === l ||
-                     l.indexOf("download-link-section") === 0 || l.indexOf("download-link-dual") === 0 ||
-                     l.indexOf("download-link-intel") === 0 || l.indexOf("download-link-windows") === 0 ||
-                     l.indexOf("download-link-linux") === 0 || l.indexOf("download-link-arm") === 0 ||
+      var isMatch = ("all" === l || "dual" === l || "intel" === l || "windows" === l || "linux" === l || "arm" === l || "pkg" === l || "download-mac-all" === l ||
+                     l.indexOf("download-link-section") === 0 || l.indexOf("download-link-dual") === 0 || l.indexOf("download-link-intel") === 0 ||
+                     l.indexOf("download-link-windows") === 0 || l.indexOf("download-link-linux") === 0 || l.indexOf("download-link-arm") === 0 ||
                      l.indexOf("download-lnk-intel") === 0 || l.indexOf("download-mac-all") === 0);
       if(!isMatch) return;
       
-      // Mark as processed
-      bq.setAttribute("data-download-injected", "true");
+      // Mark this blockquote as processed.
+      bq.setAttribute("data-download-processed", "true");
       
-      // Split on semicolon and then split each parameter on the first "=" only
+      // Split on semicolon and then split each parameter on the first "=" only.
       var parts = txt.split(";"), key = parts[0].trim().toLowerCase(), o = {};
       for(var i = 1; i < parts.length; i++){
         var eqIndex = parts[i].indexOf("=");
@@ -186,7 +188,7 @@
       if(html){
         var d = document.createElement("div");
         d.innerHTML = html.trim();
-        // For "download-mac-all" keep our extra class, else use classes based on item count
+        // For download-mac-all, keep our extra class.
         if(key === "download-mac-all"){
           d.className = "cDC download-mac-all";
         } else {
@@ -196,14 +198,15 @@
         var wrap = document.createElement("div");
         wrap.className = "dcWrap";
         wrap.appendChild(d);
-        if(bq.parentNode){
-          bq.parentNode.replaceChild(wrap, bq);
-        }
+        bq.parentNode.replaceChild(wrap, bq);
       }
     });
   }
   
-  // Run injection on initial load and observe for changes in the DOM
+  // Run injection on initial load.
   document.addEventListener("DOMContentLoaded", injectAll);
-  new MutationObserver(injectAll).observe(document.body, {childList:true, subtree:true});
+  
+  // Limit MutationObserver to a specific container if available (for example, '.post-content').
+  var observerTarget = document.querySelector(".post-content") || document.body;
+  new MutationObserver(injectAll).observe(observerTarget, {childList:true, subtree:true});
 }();
