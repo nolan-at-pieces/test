@@ -51,13 +51,12 @@
       "html:not([data-theme=dark]) details.dCard summary:hover{background:#dbeafe;}\n" +
       ".dropdown{color:inherit;fill:currentColor;stroke:currentColor;}\n" +
       "/* --- New CSS for download-mac-all only --- */\n" +
-      "/* These rules apply only to the container with both .cDC and .download-mac-all classes */\n" +
       ".download-mac-all{grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)) !important;}\n" +
       ".download-mac-all .dCard{padding:8px 16px !important;}\n";
     document.head.appendChild(s);
   }
   
-  // Build the download cards for macOS (Intel and Apple Silicon)
+  // (Helper functions for building download cards)
   function downloadMacAll(o){
     return '<div class="cDC download-mac-all">' +
            '<div><a class="dCard macCard" style="width:100%" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank">' +
@@ -75,7 +74,6 @@
            '</div>';
   }
   
-  // Build a details element with separate download links for Intel and Apple Silicon
   function macDetails(o){
     return '<details class="dCard macCard"><summary><div class="dLeft"><strong>macOS</strong><small>macOS 12.0 (Monterey) or higher</small></div>' +
            '<svg class="dropdown" viewBox="0 0 10 10"><polyline points="1,3 5,7 9,3" stroke="currentColor" fill="none" stroke-width="1"/></svg></summary>' +
@@ -91,7 +89,6 @@
            '</svg></a></div></details>';
   }
   
-  // Build the download link for Windows
   function winLink(o){
     return '<a class="dCard winCard" href="'+appendGaVisitor(o.windows||"#")+'" target="_blank">' +
            '<div class="dLeft"><strong>Windows</strong><small>Windows 10 (1809) or higher</small></div>' +
@@ -101,7 +98,6 @@
            '</svg></a>';
   }
   
-  // Build a details element with instructions for Linux installation
   function linuxDetails(o){
     return '<details class="dCard linuxCard"><summary><div class="dLeft"><strong>Linux</strong><small>Ubuntu 22+ required</small></div>' +
            '<svg class="dropdown" viewBox="0 0 10 10"><polyline points="1,3 5,7 9,3" stroke="currentColor" fill="none" stroke-width="1"/></svg></summary>' +
@@ -110,28 +106,37 @@
            "<p>Then, type <code>pieces-for-developers</code> to launch.</p></div></details>";
   }
   
-  // Main function to scan for blockquote elements and replace with download cards
+  // --- Main Injection Function ---
   function injectAll(){
-    // Skip injection if the page title indicates a 404 page.
+    // Do not run if this is a 404 page
     if(document.title && document.title.indexOf("404") > -1) return;
+    
+    // Disconnect the observer (if running) to avoid simultaneous mutations
+    if(window.__injectionObserver) {
+      window.__injectionObserver.disconnect();
+    }
     
     var bqs = [].slice.call(document.querySelectorAll("blockquote"));
     bqs.forEach(function(bq){
-      // Skip if this blockquote was already processed.
       if(bq.getAttribute("data-download-processed")) return;
       
-      var txt = bq.textContent.trim(), l = txt.toLowerCase();
-      var isMatch = ("all" === l || "dual" === l || "intel" === l || "windows" === l || "linux" === l || "arm" === l || "pkg" === l || "download-mac-all" === l ||
-                     l.indexOf("download-link-section") === 0 || l.indexOf("download-link-dual") === 0 || l.indexOf("download-link-intel") === 0 ||
-                     l.indexOf("download-link-windows") === 0 || l.indexOf("download-link-linux") === 0 || l.indexOf("download-link-arm") === 0 ||
+      var txt = bq.textContent.trim();
+      var l = txt.toLowerCase();
+      var isMatch = ("all" === l || "dual" === l || "intel" === l || "windows" === l ||
+                     "linux" === l || "arm" === l || "pkg" === l || "download-mac-all" === l ||
+                     l.indexOf("download-link-section") === 0 || l.indexOf("download-link-dual") === 0 ||
+                     l.indexOf("download-link-intel") === 0 || l.indexOf("download-link-windows") === 0 ||
+                     l.indexOf("download-link-linux") === 0 || l.indexOf("download-link-arm") === 0 ||
                      l.indexOf("download-lnk-intel") === 0 || l.indexOf("download-mac-all") === 0);
       if(!isMatch) return;
       
-      // Mark this blockquote as processed.
+      // Mark as processed so we don't re-run on the same element.
       bq.setAttribute("data-download-processed", "true");
       
-      // Split on semicolon and then split each parameter on the first "=" only.
-      var parts = txt.split(";"), key = parts[0].trim().toLowerCase(), o = {};
+      // Parse parameters from the blockquote text.
+      var parts = txt.split(";");
+      var key = parts[0].trim().toLowerCase();
+      var o = {};
       for(var i = 1; i < parts.length; i++){
         var eqIndex = parts[i].indexOf("=");
         if(eqIndex > -1){
@@ -188,7 +193,6 @@
       if(html){
         var d = document.createElement("div");
         d.innerHTML = html.trim();
-        // For download-mac-all, keep our extra class.
         if(key === "download-mac-all"){
           d.className = "cDC download-mac-all";
         } else {
@@ -197,22 +201,31 @@
         }
         var wrap = document.createElement("div");
         wrap.className = "dcWrap";
-        // Ensure the blockquote is still in the DOM before replacing it
-        if(bq.parentNode){
-          try {
-            bq.parentNode.replaceChild(wrap, bq);
-          } catch(e) {
-            console.error("Error replacing blockquote:", e);
+        wrap.appendChild(d);
+        
+        // Delay replacement slightly to let Hashnode finish its rendering.
+        setTimeout(function(){
+          if(bq.parentNode && bq.parentNode.contains(bq)){
+            try {
+              bq.parentNode.replaceChild(wrap, bq);
+            } catch(e) {
+              console.error("Error replacing blockquote:", e);
+            }
           }
-        }
+        }, 50);
       }
     });
+    
+    // Reconnect the MutationObserver.
+    if(window.__injectionObserver) {
+      window.__injectionObserver.observe(observerTarget, {childList:true, subtree:true});
+    }
   }
   
-  // Run injection on initial load.
   document.addEventListener("DOMContentLoaded", injectAll);
   
-  // Limit MutationObserver to a specific container if available (for example, '.post-content').
+  // Limit MutationObserver to a specific container if available.
   var observerTarget = document.querySelector(".post-content") || document.body;
-  new MutationObserver(injectAll).observe(observerTarget, {childList:true, subtree:true});
+  window.__injectionObserver = new MutationObserver(injectAll);
+  window.__injectionObserver.observe(observerTarget, {childList:true, subtree:true});
 }();
