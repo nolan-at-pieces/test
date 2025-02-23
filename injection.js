@@ -3,7 +3,7 @@
   function appendGaVisitor(url) {
     if (!url) return "#";
     var param = (typeof gaGlobal !== "undefined" && gaGlobal.vid) ? ("ga_visitor=" + gaGlobal.vid) : "";
-    if (param === "") return url;
+    if(param === "") return url;
     return url + (url.indexOf("?") === -1 ? "?" : "&") + param;
   }
   
@@ -108,16 +108,25 @@
            "<p>Then, type <code>pieces-for-developers</code> to launch.</p></div></details>";
   }
   
-  // Main function to scan for blockquote elements and replace with download cards
+  // Main function to scan for blockquote elements and replace them with download cards.
+  // Now skips blockquotes that are already processed.
   function injectAll(){
     var bqs = [].slice.call(document.querySelectorAll("blockquote"));
     bqs.forEach(function(bq){
+      // Skip if we've already processed this blockquote
+      if(bq.hasAttribute("data-download-injected")) return;
+      
       var txt = bq.textContent.trim(), l = txt.toLowerCase();
-      var isMatch = ("all" === l || "dual" === l || "intel" === l || "windows" === l || "linux" === l || "arm" === l || "pkg" === l || "download-mac-all" === l ||
-                     l.indexOf("download-link-section") === 0 || l.indexOf("download-link-dual") === 0 || l.indexOf("download-link-intel") === 0 ||
-                     l.indexOf("download-link-windows") === 0 || l.indexOf("download-link-linux") === 0 || l.indexOf("download-link-arm") === 0 ||
+      var isMatch = ("all" === l || "dual" === l || "intel" === l || "windows" === l ||
+                     "linux" === l || "arm" === l || "pkg" === l || "download-mac-all" === l ||
+                     l.indexOf("download-link-section") === 0 || l.indexOf("download-link-dual") === 0 ||
+                     l.indexOf("download-link-intel") === 0 || l.indexOf("download-link-windows") === 0 ||
+                     l.indexOf("download-link-linux") === 0 || l.indexOf("download-link-arm") === 0 ||
                      l.indexOf("download-lnk-intel") === 0 || l.indexOf("download-mac-all") === 0);
       if(!isMatch) return;
+      
+      // Mark as processed
+      bq.setAttribute("data-download-injected", "true");
       
       // Split on semicolon and then split each parameter on the first "=" only
       var parts = txt.split(";"), key = parts[0].trim().toLowerCase(), o = {};
@@ -177,7 +186,7 @@
       if(html){
         var d = document.createElement("div");
         d.innerHTML = html.trim();
-        // Ensure that for download-mac-all we keep our extra class
+        // For "download-mac-all" keep our extra class, else use classes based on item count
         if(key === "download-mac-all"){
           d.className = "cDC download-mac-all";
         } else {
@@ -187,12 +196,14 @@
         var wrap = document.createElement("div");
         wrap.className = "dcWrap";
         wrap.appendChild(d);
-        bq.parentNode.replaceChild(wrap, bq);
+        if(bq.parentNode){
+          bq.parentNode.replaceChild(wrap, bq);
+        }
       }
     });
   }
   
-  // Run injection on initial load and also observe for changes in the DOM
+  // Run injection on initial load and observe for changes in the DOM
   document.addEventListener("DOMContentLoaded", injectAll);
   new MutationObserver(injectAll).observe(document.body, {childList:true, subtree:true});
 }();
