@@ -106,44 +106,45 @@
            "<p>Then, type <code>pieces-for-developers</code> to launch.</p></div></details>";
   }
   
- // 4) Instead of replaceChild, transform blockquote in place
+  // 4) Instead of replacing the blockquote entirely, transform it in place with error handling.
   function transformBlockquote(bq, contentHTML, multipleCards) {
-    // Mark it as processed and style it
-    bq.setAttribute("data-download-processed", "true");
-    bq.classList.add("dcWrap");
-
-    // Clear the existing content
-    bq.innerHTML = "";
-
-    // Create a container for the cards
-    const container = document.createElement("div");
-    container.innerHTML = contentHTML.trim();
-
-    // Decide .cDC or .singleDC
-    if (multipleCards) {
-      container.className = "cDC";
-    } else {
-      container.className = "singleDC";
+    // Save original content as fallback.
+    var originalContent = bq.innerHTML;
+    try {
+      // Mark as processed and add style class.
+      bq.setAttribute("data-download-processed", "true");
+      bq.classList.add("dcWrap");
+      
+      // Clear existing content.
+      bq.innerHTML = "";
+      
+      // Create container for the new content.
+      var container = document.createElement("div");
+      container.innerHTML = contentHTML.trim();
+      container.className = multipleCards ? "cDC" : "singleDC";
+      
+      // Append new content.
+      bq.appendChild(container);
+    } catch (e) {
+      console.error("Error transforming blockquote, reverting to original content:", e);
+      bq.innerHTML = originalContent;
     }
-
-    // Append container into the blockquote
-    bq.appendChild(container);
   }
-
-  // 5) The main injection logic
+  
+  // 5) Main injection logic
   function injectAll() {
-    // Skip if 404
+    // Do not run on 404 pages.
     if (document.title && document.title.indexOf("404") > -1) return;
-
-    const bqs = Array.from(document.querySelectorAll("blockquote"));
-    bqs.forEach((bq) => {
+    
+    var bqs = Array.from(document.querySelectorAll("blockquote"));
+    bqs.forEach(function(bq) {
       if (bq.getAttribute("data-download-processed")) return;
-
-      const txt = bq.textContent.trim();
-      const l = txt.toLowerCase();
-
-      // Check if blockquote text matches
-      const isMatch = (
+      
+      var txt = bq.textContent.trim();
+      var l = txt.toLowerCase();
+      
+      // Determine if the blockquote matches our expected patterns.
+      var isMatch = (
         l === "all" ||
         l === "dual" ||
         l === "intel" ||
@@ -162,23 +163,23 @@
         l.indexOf("download-mac-all") === 0
       );
       if (!isMatch) return;
-
-      // Parse parameters
-      const parts = txt.split(";");
-      const key = parts[0].trim().toLowerCase();
-      const o = {};
-      for (let i = 1; i < parts.length; i++) {
-        const eqIndex = parts[i].indexOf("=");
+      
+      // Parse parameters from the blockquote text.
+      var parts = txt.split(";");
+      var key = parts[0].trim().toLowerCase();
+      var o = {};
+      for (var i = 1; i < parts.length; i++) {
+        var eqIndex = parts[i].indexOf("=");
         if (eqIndex > -1) {
-          const pKey = parts[i].substring(0, eqIndex).trim().toLowerCase();
-          const pVal = parts[i].substring(eqIndex + 1).trim();
+          var pKey = parts[i].substring(0, eqIndex).trim().toLowerCase();
+          var pVal = parts[i].substring(eqIndex + 1).trim();
           o[pKey] = pVal;
         }
       }
-
-      // Build the final HTML snippet
-      let html = "";
-      let multiple = false;
+      
+      // Build the HTML snippet based on the key.
+      var html = "";
+      var multiple = false;
       switch(key) {
         case "all":
         case "download-link-section":
@@ -196,7 +197,7 @@
               <div>${macDetails(o)}</div>
               <div>${winLink(o)}</div>
             </div>`;
-          multiple = false; // because we put them in one grid
+          multiple = false;
           break;
         case "intel":
         case "download-link-intel":
@@ -225,19 +226,18 @@
           html = linuxDetails(o);
           break;
       }
-
+      
       if (html) {
-        // Transform the blockquote in place
+        // Attempt to transform the blockquote in place.
         transformBlockquote(bq, html, multiple);
       }
     });
   }
-
-  // 6) Observe changes if needed
+  
+  // 6) Observe changes if needed.
   document.addEventListener("DOMContentLoaded", injectAll);
-
-  const observerTarget = document.querySelector(".post-content") || document.body;
-  const obs = new MutationObserver(injectAll);
+  var observerTarget = document.querySelector(".post-content") || document.body;
+  var obs = new MutationObserver(injectAll);
   obs.observe(observerTarget, { childList: true, subtree: true });
-
+  
 }();
