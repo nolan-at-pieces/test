@@ -201,21 +201,33 @@
           break;
         case "intel":
         case "download-link-intel":
-          html = `<a class="dCard macCard" href="${appendGaVisitor(o["mac-intel"]||"#")}" target="_blank">
-                    <!-- ... omitted for brevity ... -->
-                  </a>`;
+          html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"] || "#") + '" target="_blank">' +
+                 '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
+                 '<svg viewBox="0 0 16 16" fill="none">' +
+                 '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
+                 '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
+                 '</svg></a>';
           break;
+
+        case "arm":
         case "arm":
         case "download-link-arm":
-          html = `<a class="dCard macCard" href="${appendGaVisitor(o["mac-arm"]||"#")}" target="_blank">
-                    <!-- ... -->
-                  </a>`;
+          html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-arm"] || "#") + '" target="_blank">' +
+                 '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
+                 '<svg viewBox="0 0 16 16" fill="none">' +
+                 '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
+                 '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
+                 '</svg></a>';
           break;
+
         case "pkg":
-        case "download-lnk-intel":
-          html = `<a class="dCard macCard" href="${appendGaVisitor(o["mac-intel"]||"#")}" target="_blank">
-                    <!-- ... -->
-                  </a>`;
+        case "download-link-pkg":
+          html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"] || "#") + '" target="_blank">' +
+                 '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
+                 '<svg viewBox="0 0 16 16" fill="none">' +
+                 '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
+                 '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
+                 '</svg></a>';
           break;
         case "windows":
         case "download-link-windows":
