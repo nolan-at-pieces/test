@@ -51,7 +51,7 @@
       "html:not([data-theme=dark]) details.dCard summary:hover{background:#dbeafe;}\n" +
       ".dropdown{color:inherit;fill:currentColor;stroke:currentColor;}\n" +
       "/* --- New CSS for download-mac-all only --- */\n" +
-      ".download-mac-all{grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)) !important;}\n" +
+      ".download-mac-all{grid-template-columns: repeat(2, 1fr) !important;}\n" +
       ".download-mac-all .dCard{padding:8px 16px !important;}\n";
     document.head.appendChild(s);
   }
