@@ -57,15 +57,15 @@
   }
   
   // (Helper functions for building download cards)
-  function downloadMacAll(o){
+   function downloadMacAll(o){
     return '<div class="cDC download-mac-all">' +
-           '<div><a class="dCard macCard" style="width:100%" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank">' +
+           '<div><a class="dCard macCard" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank">' +
            '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
            '</svg></a></div>' +
-           '<div><a class="dCard macCard" style="width:100%" href="'+appendGaVisitor(o["mac-arm"]||"#")+'" target="_blank">' +
+           '<div><a class="dCard macCard" href="'+appendGaVisitor(o["mac-arm"]||"#")+'" target="_blank">' +
            '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
@@ -73,6 +73,7 @@
            '</svg></a></div>' +
            '</div>';
   }
+
   
   function macDetails(o){
     return '<details class="dCard macCard"><summary><div class="dLeft"><strong>macOS</strong><small>macOS 12.0 (Monterey) or higher</small></div>' +
@@ -131,7 +132,6 @@
     }
   }
   
-  // 5) Main injection logic
   function injectAll() {
     // Do not run on 404 pages.
     if (document.title && document.title.indexOf("404") > -1) return;
@@ -143,7 +143,6 @@
       var txt = bq.textContent.trim();
       var l = txt.toLowerCase();
       
-      // Determine if the blockquote matches our expected patterns.
       var isMatch = (
         l === "all" ||
         l === "dual" ||
@@ -177,7 +176,6 @@
         }
       }
       
-      // Build the HTML snippet based on the key.
       var html = "";
       var multiple = false;
       switch(key) {
@@ -245,7 +243,6 @@
     });
   }
   
-  // 6) Observe changes if needed.
   document.addEventListener("DOMContentLoaded", injectAll);
   var observerTarget = document.querySelector(".post-content") || document.body;
   var obs = new MutationObserver(injectAll);
