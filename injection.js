@@ -12,7 +12,7 @@
     var s = document.createElement("style");
     s.id = "download-card-styles";
     s.textContent =
-      "/* Full width container for download cards */\n" +
+          "/* Full width container for download cards */\n" +
       ".dcWrap{display:block;width:100%;margin-bottom:16px}\n" +
       "/* Grid container fills full width and stretches items */\n" +
       ".cDC{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;align-items:stretch;width:100%;}\n" +
@@ -51,6 +51,7 @@
       "html:not([data-theme=dark]) details.dCard summary:hover{background:#dbeafe;}\n" +
       ".dropdown{color:inherit;fill:currentColor;stroke:currentColor;}\n" +
       "/* --- New CSS for download-mac-all only --- */\n" +
+      "/* These rules apply only to the container with both .cDC and .download-mac-all classes */\n" +
       ".download-mac-all{grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)) !important;}\n" +
       ".download-mac-all .dCard{padding:8px 16px !important;}\n";
     document.head.appendChild(s);
