@@ -51,7 +51,7 @@
       "html:not([data-theme=dark]) details.dCard summary:hover{background:#dbeafe;}\n" +
       ".dropdown{color:inherit;fill:currentColor;stroke:currentColor;}\n" +
       "/* --- New CSS for download-mac-all only --- */\n" +
-      ".download-mac-all{grid-template-columns: repeat(2, 1fr) !important;}\n" +
+      ".download-mac-all{grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)) !important;}\n" +
       ".download-mac-all .dCard{padding:8px 16px !important;}\n";
     document.head.appendChild(s);
   }
@@ -59,13 +59,13 @@
   // (Helper functions for building download cards)
    function downloadMacAll(o){
     return '<div class="cDC download-mac-all">' +
-           '<div><a class="dCard macCard" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank">' +
+           '<div><a class="dCard macCard" style="width:100%" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank">' +
            '<div class="dLeft"><strong>Intel</strong><small>Download for macOS - Intel</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
            '</svg></a></div>' +
-           '<div><a class="dCard macCard" href="'+appendGaVisitor(o["mac-arm"]||"#")+'" target="_blank">' +
+           '<div><a class="dCard macCard" style="width:100%" href="'+appendGaVisitor(o["mac-arm"]||"#")+'" target="_blank">' +
            '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
            '<svg style="transform:scale(-1,1)" viewBox="0 0 16 16" fill="none">' +
            '<path d="M13 7H10V0H6V7L3 7V8L8 13L13 8V7Z" fill="currentColor"/>' +
