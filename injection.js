@@ -210,7 +210,6 @@
           break;
 
         case "arm":
-        case "arm":
         case "download-link-arm":
           html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-arm"] || "#") + '" target="_blank">' +
                  '<div class="dLeft"><strong>Apple Silicon</strong><small>Download for macOS - Apple Silicon / M-Series</small></div>' +
