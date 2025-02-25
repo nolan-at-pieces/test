@@ -1,36 +1,22 @@
 !function(){
-  // Helper function to append the gaGlobal visitor id and traffic details
+  // Helper function to append the gaGlobal visitor id
   function appendGaVisitor(url) {
     if (!url) return "#";
+    var param = (typeof gaGlobal !== "undefined" && gaGlobal.vid) ? ("ga_visitor=" + gaGlobal.vid) : "";
+    if (param === "") return url;
 
-    var params = [];
-
-    // Add the ga_visitor if present
-    if (typeof gaGlobal !== "undefined" && gaGlobal.vid) {
-      params.push("ga_visitor=" + encodeURIComponent(gaGlobal.vid));
+    // Add the additional parameters if they exist
+    if (typeof gaGlobal !== "undefined" && gaGlobal.traffic_source) {
+      param += "&traffic_source=" + gaGlobal.traffic_source;
+    }
+    if (typeof gaGlobal !== "undefined" && gaGlobal.traffic_medium) {
+      param += "&traffic_medium=" + gaGlobal.traffic_medium;
+    }
+    if (typeof gaGlobal !== "undefined" && gaGlobal.traffic_name) {
+      param += "&traffic_name=" + gaGlobal.traffic_name;
     }
 
-    // Add traffic source, medium, and name if present
-    if (typeof gaGlobal !== "undefined") {
-      if (gaGlobal.traffic_source) {
-        params.push("traffic_source=" + encodeURIComponent(gaGlobal.traffic_source));
-      }
-      if (gaGlobal.traffic_medium) {
-        params.push("traffic_medium=" + encodeURIComponent(gaGlobal.traffic_medium));
-      }
-      if (gaGlobal.traffic_name) {
-        params.push("traffic_name=" + encodeURIComponent(gaGlobal.traffic_name));
-      }
-    }
-
-    // If no parameters, just return the original URL
-    if (params.length === 0) {
-      return url;
-    }
-
-    // Otherwise, append them with the correct separator
-    var separator = (url.indexOf("?") === -1) ? "?" : "&";
-    return url + separator + params.join("&");
+    return url + (url.indexOf("?") === -1 ? "?" : "&") + param;
   }
   
   // Inject styles only once by checking for an existing style element.
@@ -83,6 +69,7 @@
     document.head.appendChild(s);
   }
   
+  // (Helper functions for building download cards)
   function downloadMacAll(o){
     return '<div class="cDC download-mac-all">' +
            '<div><a class="dCard macCard" style="width:100%" href="'+appendGaVisitor(o["mac-intel"]||"#")+'" target="_blank">' +
@@ -114,7 +101,7 @@
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
            '</svg></a></div></details>';
   }
-
+  
   function winLink(o){
     return '<a class="dCard winCard" href="'+appendGaVisitor(o.windows||"#")+'" target="_blank">' +
            '<div class="dLeft"><strong>Windows</strong><small>Windows 10 (1809) or higher</small></div>' +
@@ -123,18 +110,16 @@
            '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
            '</svg></a>';
   }
-
+  
   function linuxDetails(o){
     return '<details class="dCard linuxCard"><summary><div class="dLeft"><strong>Linux</strong><small>Ubuntu 22+ required</small></div>' +
            '<svg class="dropdown" viewBox="0 0 10 10"><polyline points="1,3 5,7 9,3" stroke="currentColor" fill="none" stroke-width="1"/></svg></summary>' +
            '<div><p>Run these commands in <strong>order</strong> to install and set up Pieces Desktop App:</p>' +
-           '<pre><code>sudo snap install pieces-os
-sudo snap connect pieces-os:process-control :process-control
-sudo snap install pieces-for-developers</code></pre>' +
+           '<pre><code>sudo snap install pieces-os\nsudo snap connect pieces-os:process-control :process-control\nsudo snap install pieces-for-developers</code></pre>' +
            "<p>Then, type <code>pieces-for-developers</code> to launch.</p></div></details>";
   }
-
-  // Instead of replacing the blockquote entirely, transform it in place with error handling.
+  
+  // 4) Instead of replacing the blockquote entirely, transform it in place with error handling.
   function transformBlockquote(bq, contentHTML, multipleCards) {
     // Save original content as fallback.
     var originalContent = bq.innerHTML;
@@ -158,7 +143,7 @@ sudo snap install pieces-for-developers</code></pre>' +
       bq.innerHTML = originalContent;
     }
   }
-
+  
   function injectAll() {
     // Do not run on 404 pages.
     if (document.title && document.title.indexOf("404") > -1) return;
@@ -233,6 +218,7 @@ sudo snap install pieces-for-developers</code></pre>' +
                  '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
                  '</svg></a>';
           break;
+
         case "arm":
         case "download-link-arm":
           html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-arm"] || "#") + '" target="_blank">' +
@@ -242,6 +228,7 @@ sudo snap install pieces-for-developers</code></pre>' +
                  '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
                  '</svg></a>';
           break;
+
         case "pkg":
         case "download-link-pkg":
           html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"] || "#") + '" target="_blank">' +
@@ -272,4 +259,5 @@ sudo snap install pieces-for-developers</code></pre>' +
   var observerTarget = document.querySelector(".post-content") || document.body;
   var obs = new MutationObserver(injectAll);
   obs.observe(observerTarget, { childList: true, subtree: true });
+  
 }();
