@@ -134,7 +134,7 @@ sudo snap install pieces-for-developers</code></pre>' +
            "<p>Then, type <code>pieces-for-developers</code> to launch.</p></div></details>";
   }
 
-  // 4) Instead of replacing the blockquote entirely, transform it in place with error handling.
+  // Instead of replacing the blockquote entirely, transform it in place with error handling.
   function transformBlockquote(bq, contentHTML, multipleCards) {
     // Save original content as fallback.
     var originalContent = bq.innerHTML;
@@ -233,7 +233,6 @@ sudo snap install pieces-for-developers</code></pre>' +
                  '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
                  '</svg></a>';
           break;
-
         case "arm":
         case "download-link-arm":
           html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-arm"] || "#") + '" target="_blank">' +
@@ -243,7 +242,6 @@ sudo snap install pieces-for-developers</code></pre>' +
                  '<path d="M14 14H2V16H14V14Z" fill="currentColor"/>' +
                  '</svg></a>';
           break;
-
         case "pkg":
         case "download-link-pkg":
           html = '<a class="dCard macCard" href="' + appendGaVisitor(o["mac-intel"] || "#") + '" target="_blank">' +
@@ -274,5 +272,4 @@ sudo snap install pieces-for-developers</code></pre>' +
   var observerTarget = document.querySelector(".post-content") || document.body;
   var obs = new MutationObserver(injectAll);
   obs.observe(observerTarget, { childList: true, subtree: true });
-
 }();
